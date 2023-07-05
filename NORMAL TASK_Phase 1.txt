@@ -1,0 +1,26 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+data=pd.read_csv('covid.csv')
+print(data.head())
+print(data.info())
+data=data.dropna()
+print(data)
+data=data[['Active','Country/Region','Confirmed','Deaths','Recovered']]
+total_cases=data.groupby('Active')['Confirmed'].sum()
+plt.plot(total_cases)
+plt.title('Total COVID_19 Cases Over Time')
+plt.xlabel('Active')
+plt.ylabel('Total Cases')
+plt.show()
+top_countries=data.groupby('Country/Region')['Confirmed'].max().nlargest(10)
+top_countries.plot(kind='barh')
+plt.title('Top 10 Countries with the Highiest Number of Covid-19 Cases')
+plt.xlabel('Total Cases')
+plt.ylabel('Country')
+plt.show()
+total_by_country=data.groupby('Country/Region')['Confirmed','Deaths','Recovered'].max()
+print(total_by_country)
+total_by_country['Mortality Rate']=total_by_country['Deaths']/total_by_country['Confirmed']*100
+print(total_by_country)
+total_by_country['Recovery Rate']=total_by_country['Recovered']/total_by_country['Confirmed']*100
+print(total_by_country)

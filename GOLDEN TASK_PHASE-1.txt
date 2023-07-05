@@ -1,0 +1,62 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings("ignore")
+df=pd.read_csv('dd.csv')
+df.head()
+df.shape
+df.isna().sum()
+plt.figure(figsize = [8,6], dpi=130)
+plt.title('Correlation Graph',fontsize = 11)
+sns.heatmap(df.corr(), annot = True, cmap ='coolwarm')
+plt.figure(figsize=[20,4],dpi=150)
+plt.scatter(df['Glucose'],df['Outcome'],color='red')
+plt.title('The relationship between Glucose and Diabetes',weight='bold',fontsize=25)
+plt.xticks(range (0,205,10),fontsize=20)
+plt.yticks(fontsize=20)
+plt.xlabel('Glucose',fontsize=20)
+plt.ylabel('Diabetes',fontsize=20)
+plt.grid()
+plt.show()
+plt.figure(figsize=[20,4],dpi=150)
+plt.scatter(df['Age'],df['Outcome'],color='red')
+plt.title('The Relationship between Age and Diabetes',weight='bold',fontsize=25)
+plt.xticks(range (20,85,5),fontsize=20)
+plt.yticks(fontsize=20)
+plt.xlabel('Age',fontsize=20)
+plt.ylabel('Diabetes',fontsize=20)
+plt.grid()
+plt.show()
+plt.figure(figsize=[25,10],dpi=150)
+plt.scatter(df['BMI'],df['Age'],color='blue')
+plt.title('The Relationship between Age and BMI',weight='bold',fontsize=30)
+plt.xticks(range (0,80,10),fontsize=20)
+plt.yticks(range (20,90,10),fontsize=20)
+plt.xlabel('BMI',fontsize=30)
+plt.ylabel('Age',fontsize=30)
+plt.grid()
+plt.show()
+df.describe()
+df.corr()
+y=df[['Outcome']]
+y
+x=df.loc[:,df.columns!='Outcome']
+x
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=70,random_state=42)
+print(x_train.shape)
+print(y_train.shape)
+print(x_test.shape)
+print(y_test.shape)
+from sklearn.linear_model import LogisticRegression
+logmodel=LogisticRegression()
+logmodel.fit(x_train,y_train)
+prediction=logmodel.predict(x_test)
+prediction
+from sklearn.metrics import confusion_matrix,accuracy_score,plot_confusion_matrix
+accuracy_score(y_test,prediction)
+confusion_matrix(y_test,prediction)
+plot_confusion_matrix(logmodel,x_test,y_test)
+plt.show()
