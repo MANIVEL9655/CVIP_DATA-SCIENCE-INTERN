@@ -1,0 +1,72 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+train=pd.read_csv('train.csv')
+test=pd.read_csv('test.csv')
+pd.set_option('display.max_rows',None)
+pd.set_option('display.max_columns',None)
+train.head()
+test.head()
+test.drop('id',axis=1,inplace=True)
+test.head()
+sns.countplot(train['price_range'])
+train.shape,test.shape
+train.isnull().sum()
+train.info()
+test.info()
+train.describe()
+train.plot(x='price_range',y='ram',kind='scatter')
+plt.show()
+train.plot(x='price_range',y='battery_power',kind='scatter')
+plt.show()
+train.plot(x='price_range',y='fc',kind='scatter',color='red')
+plt.show()
+train.plot(x='price_range',y='n_cores',kind='scatter')
+plt.show()
+import seaborn as sns
+plt.figure(figsize=(20,20))
+sns.heatmap(train.corr(),annot=True,cmap=plt.cm.Accent_r)
+plt.show()
+train.plot(kind='box',figsize=(20,10))
+x=train.drop('price_range',axis=1)
+y=train['price_range']
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.1,random_state=101)
+from sklearn.preprocessing import StandardScaler
+sc=StandardScaler()
+x_train=sc.fit_transform(x_train)
+x_test=sc.transform(x_test)
+test=sc.transform(test)
+x_test
+test
+from sklearn.tree import DecisionTreeClassifier
+dtc=DecisionTreeClassifier()
+dtc.fit(x_train,y_train)
+pred=dtc.predict(x_test)
+pred
+from sklearn.metrics import accuracy_score,confusion_matrix
+dtc_acc=accuracy_score(pred,y_test)
+print(dtc_acc)
+print(confusion_matrix(pred,y_test))
+from sklearn.svm import SVC
+knn=SVC()
+knn.fit(x_train,y_train)
+pred1=knn.predict(x_test)
+pred1
+from sklearn.metrics import accuracy_score
+svc_acc=accuracy_score(pred1,y_test)
+print(svc_acc)
+print(confusion_matrix(pred1,y_test))
+from sklearn.linear_model import LogisticRegression
+lr=LogisticRegression()
+lr.fit(x_train,y_train)
+from sklearn.metrics import accuracy_score
+lr_acc=accuracy_score(pred2,y_test)
+print(lr_acc)
+print(confusion_matrix(pred2,y_test))
+plt.bar(x=['dtc','svc','lr'],height=[dtc_acc,svc_acc,lr_acc])
+plt.xlabel('Algorithms')
+plt.ylabel('Accuracy Score')
+plt.show()
+lr.predict(test)
